@@ -54,21 +54,31 @@ with st.sidebar:
     selected = option_menu('Prediction',
                            ['Ridingmower','Used_cars','BMI'])
  
-if selected== 'BMI':
+if selected == 'BMI':
     st.title('BMI Classification')
-    Income = st.text_input('Income')
-    LotSize = st.text_input('LotSize')
-    Riding_prediction = ''
+
+    Gender = st.selectbox('Gender', ['Male', 'Female'])
+    Height = st.text_input('Height (cm)')
+    Weight = st.text_input('Weight (kg)')
+
+    bmi_prediction = ''
+
     if st.button('Predict'):
-        Riding_prediction = riding_model.predict([[
-            float(Income),
-            float(LotSize)
-            ]])
-        if Riding_prediction[0]==1:
-            Riding_prediction = 'Owner'
+        # แปลง Gender เป็นตัวเลขให้ตรงกับ dataset
+        if Gender == 'Male':
+            Gender = 1
         else:
-            Riding_prediction = 'Non Owner'
-    st.success(Riding_prediction)
+            Gender = 0
+
+        bmi_prediction = bmi_model.predict([[
+            float(Gender),
+            float(Height),
+            float(Weight)
+        ]])
+
+        bmi_prediction = bmi_prediction[0]
+
+        st.success(f'BMI Class = {bmi_prediction}')
 
  
  
@@ -115,3 +125,4 @@ if selected == 'Used_cars':
         Price_predict = round(Price_predict[0],2)
  
     st.success(Price_predict)
+
