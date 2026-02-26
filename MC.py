@@ -56,30 +56,22 @@ with st.sidebar:
  
 if selected == 'BMI':
     st.title('BMI Classification')
-
-    Gender = st.selectbox('Gender', ['Male', 'Female'])
-    Height = st.text_input('Height (cm)')
-    Weight = st.text_input('Weight (kg)')
-
+    Gender = st.selectbox('Gender', ('Female', 'Male'))
+    Height = st.number_input('Height (cm)', min_value=1.0)
+    Weight = st.number_input('Weight (kg)', min_value=1.0)
     bmi_prediction = ''
-
     if st.button('Predict'):
-        # แปลง Gender เป็นตัวเลขให้ตรงกับ dataset
-        if Gender == 'Male':
-            Gender = 1
+        # คำนวณ BMI
+        bmi = Weight / ((Height / 100) ** 2)
+        # จัดเกณฑ์
+        if bmi < 18.5:
+            bmi_prediction = 'ผอม'
+        elif bmi < 25:
+            bmi_prediction = 'ปกติ'
         else:
-            Gender = 0
-
-        bmi_prediction = bmi_model.predict([[
-            float(Gender),
-            float(Height),
-            float(Weight)
-        ]])
-
-        bmi_prediction = bmi_prediction[0]
-
-        st.success(f'BMI Class = {bmi_prediction}')
-
+            bmi_prediction = 'อ้วน'
+        st.write(f'ค่า BMI = {bmi:.2f}')
+    st.success(bmi_prediction)
  
  
  
@@ -125,4 +117,5 @@ if selected == 'Used_cars':
         Price_predict = round(Price_predict[0],2)
  
     st.success(Price_predict)
+
 
